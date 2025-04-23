@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Random Cat Facts</title>
+  <style>
+    body {
+      margin: 0;
+      background: #f0f2f5;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    #app {
+      background: #ffffff;
+      padding: 24px 32px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 320px;
+      position: relative;
+    }
+
+    /* Loading bar */
+    #loader {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 4px;
+      background: #ff7f50;
+      animation: loading 1.2s linear infinite;
+      display: none;
+    }
+
+    @keyframes loading {
+      0% { width: 0%; }
+      50% { width: 80%; }
+      100% { width: 0%; }
+    }
+
+    #fact {
+      margin: 20px 0;
+      font-size: 1.1rem;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    button {
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #ff7f50;
+      color: #ffffff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="loader"></div>
+    <h2>Cat Fact</h2>
+    <p id="fact">Fetching a purr‑fect fact...</p>
+    <button id="newFact">Another Fact</button>
+  </div>
+
+  <script>
+    const loader = document.getElementById("loader");
+    const factEl = document.getElementById("fact");
+
+    function showLoader() {
+      loader.style.display = "block";
+    }
+
+    function hideLoader() {
+      loader.style.display = "none";
+    }
+
+    async function getFact() {
+      showLoader();
+      try {
+        const res = await fetch("https://catfact.ninja/fact");
+        const data = await res.json();
+        factEl.textContent = data.fact;
+      } catch (err) {
+        factEl.textContent = "Couldn't fetch a fact right now. Try again.";
+      } finally {
+        hideLoader();
+      }
+    }
+
+    document.getElementById("newFact").addEventListener("click", getFact);
+    document.addEventListener("DOMContentLoaded", getFact);
+
+    console.log("You got this!  Just one fetch() away from greatness.");
+  </script>
+</body>
+</html>
